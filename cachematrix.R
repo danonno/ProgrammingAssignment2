@@ -1,18 +1,14 @@
-##
-## Cache the inverse of a matrix.
-##
-## Usage:
-## > x <- matrix(c(1, 0, 0, 2), nrow = 2, ncol = 2)       // Create a matrix x
-## > x                                         // Return the matrix
-## > xcache <- makeCacheMatrix(x)              // Create the "special" matrix
-## > xcache$get()                              // Return the "special" matrix
-## > cacheSolve(xcache)                        // Return the inverse
-## > cacheSolve(xcache)                        // Call the 2nd time, so return
-##                                             // the cached inverse
+################################################################################
+## The following two functions will cache the inverse of a matrix.
 ##
 ## makeCacheMatrix: This function creates a special "matrix" object
 ## that can cache its inverse.
 ## 
+## cacheSolve: This function computes the inverse of the special
+## "matrix" returned by the `makeCacheMatrix` function. If the inverse has
+## already been calculated (and the matrix has not changed), then
+## cacheSolve will retrieve the inverse from the cache.
+################################################################################
 makeCacheMatrix <- function(x = matrix()) {
   m <- NULL
   set <- function(y) {
@@ -27,16 +23,10 @@ makeCacheMatrix <- function(x = matrix()) {
        getInverse = getInverse)
 }
 
-## cacheSolve: This function computes the inverse of the special
-## "matrix" returned by `makeCacheMatrix` above. If the inverse has
-## already been calculated (and the matrix has not changed), then
-## cacheSolve  should retrieve the inverse from the cache.
-##
 cacheSolve <- function(x, ...) {
-  ## Return a matrix that is the inverse of 'x'
   inverse <- x$getInverse()
   if(!is.null(inverse)) {
-    message("getting cached data ...")
+    message("Getting cached data ...")
     return(inverse)
   }
   dat <- x$get()
@@ -44,6 +34,16 @@ cacheSolve <- function(x, ...) {
   x$setInverse(inverse)
   inverse
 }
+################################################################################
+## Usage:
+## > x <- matrix(c(1, 0, 0, 2), nrow = 2, ncol = 2)       // Create a matrix x
+## > x                                         // Return the matrix
+## > xcache <- makeCacheMatrix(x)              // Create the "special" matrix
+## > xcache$get()                              // Return the "special" matrix
+## > cacheSolve(xcache)                        // Return the inverse
+## > cacheSolve(xcache)                        // Call the 2nd time, so return
+##                                             // the cached inverse
+##
 ## Samle run
 # > x <- matrix(c(1, 0, 0, 2), nrow = 2, ncol = 2) 
 # > x
@@ -56,7 +56,8 @@ cacheSolve <- function(x, ...) {
 # [1,]    1  0.0
 # [2,]    0  0.5
 # > cacheSolve(xcache)
-# getting cached data ...
+# Getting cached data ...
 # [,1] [,2]
 # [1,]    1  0.0
 # [2,]    0  0.5
+################################################################################
